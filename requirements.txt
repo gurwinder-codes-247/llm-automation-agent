@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+aiohttp
+requests
+gitpython
+pillow
+markdown
+pandas
