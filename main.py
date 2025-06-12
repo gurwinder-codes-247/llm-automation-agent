@@ -33,11 +33,11 @@ app = FastAPI()
 # Root endpoints for GET and POST to avoid 404/405 and JSON parse errors on /
 @app.get("/")
 async def root_get():
-    return JSONResponse(content={"status": "ok"})
+    return JSONResponse(content={"answer": "ok"})
 
 @app.post("/")
 async def root_post():
-    return JSONResponse(content={"status": "ok"})
+    return JSONResponse(content={"answer": "ok"})
 
 # CORS (optional, for local dev)
 app.add_middleware(
