@@ -32,6 +32,14 @@ from agent_tasks import (
 
 app = FastAPI()
 
+from fastapi import FastAPI, Response
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return Response(status_code=200)
+
 # CORS (optional, for local dev)
 app.add_middleware(
     CORSMiddleware,
