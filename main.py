@@ -1,9 +1,7 @@
-
-
 import os
 import aiohttp
 import asyncio
-from fastapi import FastAPI, Request, HTTPException, status
+from fastapi import FastAPI, Request, HTTPException, status, Response
 from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
@@ -32,12 +30,13 @@ from agent_tasks import (
 
 app = FastAPI()
 
-from fastapi import FastAPI, Response
-
-app = FastAPI()
-
+# Root endpoints for GET and POST to avoid 404/405 on /
 @app.get("/")
-async def root():
+async def root_get():
+    return Response(status_code=200)
+
+@app.post("/")
+async def root_post():
     return Response(status_code=200)
 
 # CORS (optional, for local dev)
