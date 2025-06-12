@@ -2,7 +2,7 @@ import os
 import aiohttp
 import asyncio
 from fastapi import FastAPI, Request, HTTPException, status, Response
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from agent_tasks import (
@@ -30,14 +30,14 @@ from agent_tasks import (
 
 app = FastAPI()
 
-# Root endpoints for GET and POST to avoid 404/405 on /
+# Root endpoints for GET and POST to avoid 404/405 and JSON parse errors on /
 @app.get("/")
 async def root_get():
-    return Response(status_code=200)
+    return JSONResponse(content={"status": "ok"})
 
 @app.post("/")
 async def root_post():
-    return Response(status_code=200)
+    return JSONResponse(content={"status": "ok"})
 
 # CORS (optional, for local dev)
 app.add_middleware(
@@ -48,10 +48,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # Always use /data as the root for all file operations
 DATA_DIR = os.path.abspath("/data")
-
 
 # --- Utility functions ---
 def safe_path(path: str) -> str:
@@ -81,7 +79,6 @@ async def call_llm(prompt: str, files: Optional[dict] = None) -> str:
             data = await resp.json()
             return data.get("choices", [{}])[0].get("text", "")
 
-
 # --- Endpoints ---
 @app.post("/run")
 async def run_task(request: Request, task: Optional[str] = None):
@@ -94,7 +91,6 @@ async def run_task(request: Request, task: Optional[str] = None):
             task = None
     if not task:
         raise HTTPException(status_code=400, detail="Task description required.")
-
 
     # Step 1: Use LLM to parse the task and determine the required action
     try:
